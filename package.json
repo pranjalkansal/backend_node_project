@@ -1,0 +1,25 @@
+{
+  "name": "backend_project",
+  "version": "1.0.0",
+  "description": "practice directory",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pranjalkansal/backend_project.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Pranjal Kansal",
+  "license": "ISC",
+  "dependencies": {
+    "hapi": "^11.1.2",
+    "hapi-swagger": "^2.2.4",
+    "inert": "^3.2.0",
+    "joi": "^7.0.1",
+    "jsonwebtoken": "^5.4.1",
+    "log4js": "^0.6.29",
+    "mongoose": "^4.3.1",
+    "vision": "^4.0.1"
+  }
+}

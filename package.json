@@ -5,7 +5,7 @@
   "main": "server.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pranjalkansal/backend_project.git"
+    "url": "https://github.com/pranjalkansal/node_backend_project.git"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -67,11 +67,11 @@ var user_controller = {
 					return false;
 				}
 				console.log(Config.Database.query.success);
-				var registered_users = result;
 				var filtered_result = [];
 				var value = request.params.value.toLowerCase();
-				registered_users.forEach(function(column) {
-					if(column.first_name.search(value)>-1 || column.last_name.search(value)>-1 || column.email.search(value)>-1) {
+				result.forEach(function(column) {
+					var name = column.first_name.toLowerCase() + ' ' + column.last_name.toLowerCase();
+					if(name.search(value)>-1 || column.email.search(value)>-1) {
 						filtered_result.push(column);
 					}
 				});

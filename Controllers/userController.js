@@ -58,6 +58,26 @@ var user_controller = {
 				});
 			});
 		});
+	},
+	user_search: function (request, reply) {
+		if(request.params.value) {
+			Users.find({}, {'password': 0, '_id': 0}, function(error, result) {
+				if(error) {
+					console.log(Config.Database.query.error);
+					return false;
+				}
+				console.log(Config.Database.query.success);
+				var registered_users = result;
+				var filtered_result = [];
+				var value = request.params.value.toLowerCase();
+				registered_users.forEach(function(column) {
+					if(column.first_name.search(value)>-1 || column.last_name.search(value)>-1 || column.email.search(value)>-1) {
+						filtered_result.push(column);
+					}
+				});
+				return reply(filtered_result);
+			}); 
+		}
 	}
 };
 

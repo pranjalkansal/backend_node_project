@@ -36,6 +36,21 @@ var user_routes = [
 			}
 		},
 		handler: Controllers.user_register
+	},
+	{
+		method: 'GET',
+		path: '/user/search/{value}',
+		config: {
+			tags: ['api'],
+			description: 'search users',
+			notes: 'Search for all registered users.',
+			validate: {
+				params: {
+					value: Joi.string().min(1).description('Find people').required()
+				}
+			}
+		},
+		handler: Controllers.user_search
 	}
 ];
 

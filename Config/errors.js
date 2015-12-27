@@ -14,6 +14,16 @@ var request_feedback = {
 			error: 'Error creating token!!',
 			success: 'Access token successfully created!!'
 		}
+	},
+	bcrypt: {
+		salt: {
+			error: 'Error creating Bcrypt salt!!',
+			success: 'Bcrypt - salt created!! '
+		},
+		hash : {
+			error: 'Error creating Bcrypt hash!!',
+			success: 'Bcrypt - hash created!! '
+		}
 	}
 };
 

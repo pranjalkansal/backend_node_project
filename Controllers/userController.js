@@ -1,4 +1,6 @@
 const jwt = require('jsonwebtoken');
+const Bcrypt = require('bcrypt');
+
 const Config = require('../Config/index.js');
 const Mongoose = require('../DAO/mongo.js');
 const Schema = require('../DAO/schema.js');
@@ -30,14 +32,32 @@ var user_controller = {
 		});
 	},
 	user_register: function (request, reply) {
-		var users = new Users(request.payload);
-		users.save(function(error) {
-			if(error)
-				console.log(Config.Database.entry.error + 'Email already registered!!');
-			else
-				console.log(Config.Database.entry.success);
+		Bcrypt.genSalt(Config.Base.bcrypt.rounds, function(error, salt) {
+			if(error) {
+				console.log(Config.Message.bcrypt.salt.error);
+				return false;
+			}
+			console.log(Config.Message.bcrypt.salt.success);
+			Bcrypt.hash(request.payload.password, salt, function(error, hash) {
+				if(error) {
+					console.log(Config.Message.bcrypt.hash.error);
+					return false;
+				}
+				console.log(Config.Message.bcrypt.hash.success);
+				request.payload.password = hash;
+				var users = new Users(request.payload);
+				users.save(function(error) {
+					if(error) {
+						console.log(Config.Database.entry.error + 'Email already registered!!');
+						return reply(Config.Database.entry.error + 'Email already registered!!');
+					}
+					else {
+						console.log(Config.Database.entry.success);
+						return reply(Config.Database.entry.success);
+					}
+				});
+			});
 		});
-		return reply(request.payload);
 	}
 };
 

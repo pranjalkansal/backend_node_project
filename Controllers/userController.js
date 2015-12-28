@@ -8,27 +8,43 @@ const Schema = require('../DAO/schema.js');
 var Users = Mongoose.model('users', Schema.register);
 var user_controller = {
 	user_login: function (request, reply) {
-		Users.findOne({'email': request.payload.username}, function(error, result) {
+		Users.findOne({'email': request.payload.username}, {'email': 1, 'password': 1} , function(error, result) {
 			if(error) {
 				console.log(Config.Database.query.error);
-				return false;
+				return reply(Config.Message.server.error);
 			}
 			console.log(Config.Database.query.success);
 			if(result) {
-				console.log(Config.Message.user.login.success);
-				var payload = {
-					issuer: request.payload.username,
-					expiresIn: Config.Base.token.expire
-				};
-				var token = jwt.sign(payload, Config.Base.token.secret , function(error) {
-					if(error)
-						console.log(Config.Message.token.create.error);
-					else
-						console.log(Config.Message.token.create.success);
+				Bcrypt.compare(request.payload.password, result.password, function(error, result) {
+					if(error) {
+						console.log(Config.Message.bcrypt.compare.error);
+						return reply(Config.Message.server.error);
+					}
+					else {
+						console.log(Config.Message.bcrypt.compare.success);
+						if(result) {
+							jwt.sign(request.payload.username, Config.Base.token.secret, Config.Base.token.options,function(token) {
+								if(!token) {
+									console.log(Config.Message.token.create.error);
+									return reply(Config.Message.server.error);
+								}
+								else {
+									console.log(Config.Message.token.create.success);
+									return reply(token);
+								}
+							});
+						}
+						else {
+							console.log(Config.Message.user.login.error);
+							return reply(Config.Message.user.login.error);
+						}
+					}
 				});
-				return reply(token);
 			}
-			return reply(Config.Message.user.login.error);
+			else {
+				console.log(Config.Message.user.login.error);
+				return reply(Config.Message.user.login.error);
+			}
 		});
 	},
 	user_register: function (request, reply) {

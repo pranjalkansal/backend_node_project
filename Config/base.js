@@ -5,7 +5,10 @@ const base = {
 	},
 	token: {
 		secret: 'getAccessTokenKey' + new Date(),
-		expires: 1800
+		options: {
+			algorithm: 'HS256',
+			expiresIn: 1800 
+		}
 	},
 	bcrypt: {
 		rounds: 10

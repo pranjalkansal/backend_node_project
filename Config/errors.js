@@ -20,10 +20,17 @@ var request_feedback = {
 			error: 'Error creating Bcrypt salt!!',
 			success: 'Bcrypt - salt created!! '
 		},
-		hash : {
+		hash: {
 			error: 'Error creating Bcrypt hash!!',
 			success: 'Bcrypt - hash created!! '
+		},
+		compare: {
+			error: 'Error occured while comparing hash!!',
+			success: 'Hash successfully compared!!'
 		}
+	},
+	server: {
+		error: 'Server error occured!!'
 	}
 };
 

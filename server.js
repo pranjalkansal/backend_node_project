@@ -1,3 +1,5 @@
+'use strict';
+
 const Hapi = require('hapi');
 const Config = require('./Config/index.js');
 const Plugins = require('./Plugins/index.js');

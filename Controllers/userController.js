@@ -1,11 +1,14 @@
+'use strict';
+
 const jwt = require('jsonwebtoken');
 const Bcrypt = require('bcrypt');
 
 const Config = require('../Config/index.js');
 const Mongoose = require('../DAO/mongo.js');
-const Schema = require('../DAO/schema.js');
+const Schema = require('../DAO/index.js');
 
-var Users = Mongoose.model('users', Schema.register);
+var Users = Mongoose.model('users', Schema.user.register);
+var Track = Mongoose.model('track_counts', Schema.query.track_count);
 var user_controller = {
 	user_login: function (request, reply) {
 		Users.findOne({'email': request.payload.username}, {'email': 1, 'password': 1} , function(error, result) {
@@ -61,15 +64,44 @@ var user_controller = {
 				}
 				console.log(Config.Message.bcrypt.hash.success);
 				request.payload.password = hash;
-				var users = new Users(request.payload);
+				let users = new Users(request.payload);
 				users.save(function(error) {
 					if(error) {
 						console.log(Config.Database.entry.error + 'Email already registered!!');
 						return reply(Config.Database.entry.error + 'Email already registered!!');
 					}
 					else {
-						console.log(Config.Database.entry.success);
-						return reply(Config.Database.entry.success);
+						Track.find({table: 'users'}, function(error, result) {
+							if(error) {
+								console.log(Config.Database.entry.error);
+								return reply(Config.Message.server.error);
+							}
+							if(!result.length) {
+								let track = new Track({table: 'users', count: 1});
+								track.save(function(error) {
+									if(error) {
+										console.log(Config.Database.entry.error);
+										return reply(Config.Message.server.error);
+									}
+									else {
+										console.log(Config.Database.entry.success);
+										return reply(Config.Database.entry.success);
+									}
+								});
+							}
+							else {
+								Track.update({table: 'users'}, {$inc: {count: 1}}, function(error) {
+									if(error) {
+										console.log(Config.Database.entry.error);
+										return reply(Config.Message.server.error);
+									}
+									else {
+										console.log(Config.Database.entry.success);
+										return reply(Config.Database.entry.success);
+									}
+								});
+							}
+						});
 					}
 				});
 			});
@@ -83,8 +115,8 @@ var user_controller = {
 					return false;
 				}
 				console.log(Config.Database.query.success);
-				var filtered_result = [];
-				var value = request.params.value.toLowerCase();
+				let filtered_result = [];
+				let value = request.params.value.toLowerCase();
 				result.forEach(function(column) {
 					var name = column.first_name.toLowerCase() + ' ' + column.last_name.toLowerCase();
 					if(name.search(value)>-1 || column.email.search(value)>-1) {

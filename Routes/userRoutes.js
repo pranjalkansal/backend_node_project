@@ -1,3 +1,5 @@
+'use strict';
+
 const Joi = require('joi');
 const Controllers = require('../Controllers/index.js');
 

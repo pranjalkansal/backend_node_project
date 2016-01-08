@@ -1,3 +1,5 @@
+'use strict';
+
 var database = {
 	connection: {
 		error: 'Oops, error in connecting database!!',

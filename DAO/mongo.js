@@ -1,3 +1,5 @@
+'use strict';
+
 const Config = require('../Config/index.js');
 const Mongoose = require('mongoose');
 

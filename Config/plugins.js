@@ -1,3 +1,5 @@
+'use strict';
+
 const Package = require('../package.json');
 
 const swaggerOptions = {

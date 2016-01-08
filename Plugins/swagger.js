@@ -1,3 +1,5 @@
+'use strict';
+
 const Inert = require('inert');
 const Vision = require('vision');
 const HapiSwagger = require('hapi-swagger');
